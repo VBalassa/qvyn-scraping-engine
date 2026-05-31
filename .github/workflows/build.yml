@@ -17,25 +17,52 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Java 21 beállítása
+      - name: Java 21 setup
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build with Maven
+      - name: Run maven build
         run: mvn clean package -DskipTests
-
-      - name: Bejelentkezés ghcr.io-ra
-        uses: docker/login-action@v3
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          name: app-jar
+          path: target/*.jar
 
-      - name: Docker image build és push
-        uses: docker/build-push-action@v5
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v4
         with:
-          context: .
-          push: true
-          tags: ghcr.io/vbalassa/${{ github.event.repository.name }}:latest
+          name: app-jar
+          path: target/
+      - name: Run unit tests
+        run: mvn test
+
+
+    security-check:
+      if: false
+      # TODO: apply Sonar and trivy/snyk check here!
+
+#    publish:
+#      runs-on: ubuntu-latest
+#      needs: test
+#
+#      steps:
+#      - name: Bejelentkezés ghcr.io-ra
+#        uses: docker/login-action@v3
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Docker image build és push
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          push: true
+#          tags: ghcr.io/vbalassa/${{ github.event.repository.name }}:latest
