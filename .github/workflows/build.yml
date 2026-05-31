@@ -44,8 +44,8 @@ jobs:
         run: mvn test
 
 
-    security-check:
-      if: false
+#    security-check:
+#      if: false
       # TODO: apply Sonar and trivy/snyk check here!
 
 #    publish:
