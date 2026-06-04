@@ -85,12 +85,14 @@ jobs:
     steps:
       - name: Stop old container
         run: |
+          Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
           docker stop ${{ github.event.repository.name }}:latest -ErrorAction SilentlyContinue
           docker rm ${{ github.event.repository.name }}:latest -ErrorAction SilentlyContinue
         shell: powershell
 
       - name: Run new container
         run: |
+          Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
           docker run -d `
             --name ${{ github.event.repository.name }} `
             -p 8080:8080 `
