@@ -85,8 +85,8 @@ jobs:
     steps:
       - name: Stop old container
         run: |
-          docker stop ${{ github.event.repository.name }}:latest -ErrorAction SilentlyContinue
-          docker rm ${{ github.event.repository.name }}:latest -ErrorAction SilentlyContinue
+          docker stop ${{ github.event.repository.name }}:latest
+          docker rm ${{ github.event.repository.name }}:latest
         shell: powershell
 
       - name: Run new container
