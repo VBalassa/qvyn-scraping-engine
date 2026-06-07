@@ -85,8 +85,10 @@ jobs:
     steps:
       - name: Stop old container
         run: |
-          docker stop ${{ github.event.repository.name }}:latest
-          docker rm ${{ github.event.repository.name }}:latest
+          if (docker ps -q -f name=qvyn-scraping-engine) {
+              docker stop ${{ github.event.repository.name }}:latest
+              docker rm ${{ github.event.repository.name }}:latest
+            }
         shell: powershell
 
       - name: Run new container
