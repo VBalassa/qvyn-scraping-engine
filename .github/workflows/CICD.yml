@@ -83,12 +83,6 @@ jobs:
     runs-on: self-hosted
     needs: docker-build-and-publish
     steps:
-      - name: Detect runner user
-        run: |
-          $sid = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-20")
-          $account = $sid.Translate([System.Security.Principal.NTAccount])
-          Write-Host $account.Value
-          net localgroup docker-users $account.Value /ADD
       - name: Stop old container
         run: |
           docker stop ${{ github.event.repository.name }}:latest
