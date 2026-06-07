@@ -83,6 +83,8 @@ jobs:
     runs-on: self-hosted
     needs: docker-build-and-publish
     steps:
+      - name: Detect runner user
+        run: whoami
       - name: Stop old container
         run: |
           docker stop ${{ github.event.repository.name }}:latest
